@@ -1,12 +1,12 @@
 """
-module pour l'etape 1
+Module pour l'etape 1
 """
 from projet.outils.GrapheDeLieux import GrapheDeLieux
 from projet.solvers.SolverSAT import SolverSAT
 
 class Etape1 :
     """
-    classe pour realiser l'etape 1 du projet (tache 1) 
+    Classe pour realiser l'etape 1 du projet (tache 1)
     """
     # attributs
     # //////////////////////////////////////////////
@@ -54,9 +54,32 @@ class Etape1 :
         """
         # A ECRIRE par les etudiants en utilisant le contenu de g
         # ajout possible de parametre => modifier aussi l'appel ds le main
-        self.base = [[-1, 2], [-1, -2]]  # a maj
-        self.nbVariables = 2             # a maj
-    
+
+        print(self.g)
+        self.nbVariables = self.g.getNbSommets() * x
+
+        couleur=0
+        base=[]
+        for sommet in range(self.g.getNbSommets()):
+            # Init de la liste pour les clauses de l'environnement
+            env = []
+            # Remplissage des clauses sur les sommets
+            for c in range(x):
+                couleur+=1 #Trouver une meilleure numérotation
+                for couleur_deja_presente in env:
+                    if [-couleur, -couleur_deja_presente] not in self.base \
+                            and [-couleur_deja_presente,-couleur] not in self.base:
+                        self.base.append([-couleur, -couleur_deja_presente])
+                env.append(couleur)
+            self.base.append(env)
+
+            # Remplissage des clauses pour les arrêtes
+            for sommet_adjacent in self.g.getAdjacents(sommet):
+                for c in range(x):
+                    #on ajoute les couples
+                    continue
+
+        print(self.base)
     
     def execSolver(self) : 
         """
@@ -85,65 +108,65 @@ class __testEtape1__ :
     if __name__ == '__main__':
         
         # TEST 1 : town10.txt avec 3 couleurs
-        print("Test sur fichier town10.txt avec 3 couleurs") ;
-        e = Etape1("Data/town10.txt",True) ;
-        e.majBase(3) ;
-        e.affBase() ;
-        print("Resultat obtenu (on attend True) :",e.execSolver()) ;
+        print("Test sur fichier town10.txt avec 3 couleurs")
+        e = Etape1("../../Data/town10.txt",True)
+        e.majBase(3)
+        #e.affBase()
+        #print("Resultat obtenu (on attend True) :",e.execSolver())
         
-        
+        '''
         # TEST 2 : town10.txt avec 2 couleurs
-        print("Test sur fichier town10.txt avec 2 couleurs") ;
-        e.majBase(2) ;
-        e.affBase() ;
-        print("Resultat obtenu (on attend False) :",e.execSolver()) ;
+        print("Test sur fichier town10.txt avec 2 couleurs")
+        e.majBase(2)
+        e.affBase()
+        print("Resultat obtenu (on attend False) :",e.execSolver())
         
         
         # TEST 3 : town10.txt avec 4 couleurs
-        print("Test sur fichier town10.txt avec 4 couleurs") ;
-        e.majBase(4) ;
-        e.affBase() ;
-        print("Resultat obtenu (on attend True) :",e.execSolver()) ;
+        print("Test sur fichier town10.txt avec 4 couleurs")
+        e.majBase(4)
+        e.affBase()
+        print("Resultat obtenu (on attend True) :",e.execSolver())
         
         
         # TEST 4 : flat20_3_0.col avec 4 couleurs
-        print("Test sur fichier flat20_3_0.col avec 4 couleurs") ;
-        e = Etape1("Data/pb-etape1/flat20_3_0.col",False) ;
-        e.majBase(4) ;
-        # e.affBase() ;
-        print("Resultat obtenu (on attend True) :",e.execSolver()) ;
+        print("Test sur fichier flat20_3_0.col avec 4 couleurs")
+        e = Etape1("../../Data/pb-etape1/flat20_3_0.col",False)
+        e.majBase(4)
+        # e.affBase()
+        print("Resultat obtenu (on attend True) :",e.execSolver())
         
         # TEST 5 : flat20_3_0.col avec 3 couleurs
-        print("Test sur fichier flat20_3_0.col avec 3 couleurs") ;
-        e.majBase(3) ;
+        print("Test sur fichier flat20_3_0.col avec 3 couleurs")
+        e.majBase(3)
         # e.affBase() ;
-        print("Resultat obtenu (on attend True) :",e.execSolver()) ;
+        print("Resultat obtenu (on attend True) :",e.execSolver())
         
         # TEST 6 : flat20_3_0.col avec 2 couleurs
-        print("Test sur fichier flat20_3_0.col avec 2 couleurs") ;
-        e.majBase(2) ;
+        print("Test sur fichier flat20_3_0.col avec 2 couleurs")
+        e.majBase(2)
         # e.affBase() ;
-        print("Resultat obtenu (on attend False) :",e.execSolver()) ;
+        print("Resultat obtenu (on attend False) :",e.execSolver())
         
             
         
         # TEST 7 : jean.col avec 10 couleurs
-        print("Test sur fichier jean.col avec 10 couleurs") ;
-        e = Etape1("Data/pb-etape1/jean.col",False) ;
-        e.majBase(10) ;
+        print("Test sur fichier jean.col avec 10 couleurs")
+        e = Etape1("../../Data/pb-etape1/jean.col",False)
+        e.majBase(10)
         # e.affBase() ;
-        print("Resultat obtenu (on attend True) :",e.execSolver()) ;
+        print("Resultat obtenu (on attend True) :",e.execSolver())
         
         # TEST 9 : jean.col avec 9 couleurs
-        print("Test sur fichier jean.col avec 9 couleurs") ;
-        e.majBase(9) ;
+        print("Test sur fichier jean.col avec 9 couleurs")
+        e.majBase(9)
         # e.affBase() ;
-        print("Resultat obtenu (on attend False) :",e.execSolver()) ;
+        print("Resultat obtenu (on attend False) :",e.execSolver())
         
         # TEST 8 : jean.col avec 3 couleurs
-        print("Test sur fichier jean.col avec 3 couleurs") ;
-        e.majBase(3) ;
+        print("Test sur fichier jean.col avec 3 couleurs")
+        e.majBase(3)
         # e.affBase() ;
-        print("Resultat obtenu (on attend False) :",e.execSolver()) ;
-        
+        print("Resultat obtenu (on attend False) :",e.execSolver())
+        '''
 
