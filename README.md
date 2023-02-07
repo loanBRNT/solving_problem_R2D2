@@ -96,3 +96,7 @@ Notons que l'on pourrait optimiser en fusionnant les 2 boucles, mais cela
 imposerait des vérifications sur la tableCorrespondance et un changement dans
 la façon de gérer l'attribution de l'entier_logique. Ma solution a passé les
 tests parfaitement. Je vais prendre un peu d'avance en commençant l'étape 2.
+
+L'étape 2 est un peu plus lourde à comprendre, j'ai complété quelques fonctions
+évidentes. Je réserve la séance prochaine à l'élaboration de l'algo pour
+déterminer le plus court chemin entre 2 lieux.

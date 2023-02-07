@@ -5,6 +5,7 @@ module principal pour l'etape 2
 from projet.outils.GrapheDeLieux import GrapheDeLieux
 # rajouter ensuite le import permettant d'utiliser le solver (l'algo) choisi
 # from solvers.... import ...
+from projet.solvers.SolverAStar import SolverAStar
 
 from projet.etape2.EtatCas1 import EtatCas1
 from projet.etape2.EtatCas2 import EtatCas2
@@ -26,11 +27,14 @@ class Etape2 :
         # tests sur CAS 1 : entre 2 villes donnees
         # ///////////////////////////////////////
         # cas : 10 villes de 0 à 9
-        tg = GrapheDeLieux.loadGraph("Data/town10.txt",True) 
+        tg = GrapheDeLieux.loadGraph("../../Data/town10.txt",True)
         cas1 = EtatCas1(tg) 
         print("======== TEST CAS 1 10 villes de 0 a 9 : \n")
-        # choisir ici un algo et l'executer 
-                                 
+        # choisir ici un algo et l'executer
+        s=SolverAStar()
+        s.aStar()
+
+        '''                        
         # cas : 10 villes de 5 à 9
         cas1 = EtatCas1(tg,5,9) 
         print("======== TEST CAS 1 10 villes de 5 a 9 : \n")
@@ -113,5 +117,5 @@ class Etape2 :
         cas3 = EtatCas3(tg) 
         print("======== TEST CAS 3 11 villes de 0 a 10 : \n")
          # choisir ici un algo et l'executer                                    
-                                                                                                        
+        '''
 

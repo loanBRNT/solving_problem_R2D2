@@ -3,7 +3,8 @@ module pour l'état de l'etape 2 ds le cas 1
 """
 from projet.outils.GrapheDeLieux import GrapheDeLieux
 from projet.etape2.Etat import Etat
-
+from projet.solvers.SolverAStar import SolverAStar
+from projet.outils.GrapheDeLieux import GrapheDeLieux
 
 class EtatCas1(Etat) :
     """ Classe pour definir un etat pour le cas 1 de la tache 2 (hérite de Etat)
@@ -14,11 +15,17 @@ class EtatCas1(Etat) :
     # //////////////////////////////////////////////
     tg : GrapheDeLieux
     """ le graphe representant le monde """ 
-    
+
+    arrive : int
+
+    depart : int
+
+    courant : int
+
     # constructeurs
     # A ECRIRE/MODIFIER/COMPLETER
     # //////////////////////////////////////////////
-    def __init__(self, tg : GrapheDeLieux, param1 = None, param2 = None) :
+    def __init__(self, tg : GrapheDeLieux, num_dep : int = 0, num_arv : int = -1) :
         """ constructeur d'un etat a partir du graphe representant le monde
         
         :param tg: graphe representant le monde
@@ -28,7 +35,12 @@ class EtatCas1(Etat) :
         :param param2: a definir eventuellement
         """ 
         self.tg = tg
-        # a completer pour tenir compte de la presence ou pas des deux derniers parametres
+        self.courant = num_dep
+        self.depart = num_dep
+        if num_arv == -1:
+            num_arv = self.tg.getNbSommets()-1
+        self.arrive = num_arv
+
      
     
     # methodes issues de Etat
@@ -37,27 +49,24 @@ class EtatCas1(Etat) :
         """ methode detectant si l'etat est une solution
         
         :return true si l'etat courant est une solution, false sinon
-        """ 
-        # A ECRIRE et MODIFIER le return en consequence
-        return false 
+        """
+        return self.courant == self.arrive
     
     
     def successeurs(self) :
         """ methode permettant de recuperer la liste des etats successeurs de l'etat courant
         
         :return liste des etats successeurs de l'etat courant
-        """ 
-        # A ECRIRE et MODIFIER le return en consequence
-        return [] 
+        """
+        return self.tg.getAdjacents(self.courant)
     
     
     def h(self) :  
         """ methode permettant de recuperer l'heuristique de l'etat courant 
         
         :return heuristique de l'etat courant
-        """ 
-        # A ECRIRE et MODIFIER le return en consequence
-        return 0 
+        """
+        return GrapheDeLieux.dist(self.courant,self.arrive,self.tg)
     
     
     def k(self, e) :
@@ -66,9 +75,8 @@ class EtatCas1(Etat) :
         :param e: un etat
         
         :return cout du passage de l'etat courant à l'etat e
-        """ 
-        # A ECRIRE et MODIFIER le return en consequence
-        return 0 
+        """
+        return self.tg.getCoutArete(self.courant,e)
     
     
     def displayPath(self, pere) :
