@@ -35,8 +35,64 @@ Dans un second temps, il fallait regarder la documentation du solveur
 pour se familiariser avec. Puis, on commence à modéliser le problème.
 
 Soit notre graphe de *i* sommets, on a à disposition *N* couleurs. 
-DONC, une variable de notre encodage en logique propositionelle sera représentée par
+DONC, une variable de notre encodage en logique propositionnelle sera représentée par
 Ki = "Le sommet i est colorée en K" (K allant de 1 à N). Cela nous fait donc N*i variables au total
 
 J'ai commencé à implémenter cette logique en code pour les sommets.
 Il faut que j'améliore la numérotation de mes variables.
+
+### 07/02 - 2H
+
+L'objectif des 2 heures était de terminer l'étape 1. J'ai donc commencé 
+à réfléchir à une méthode de numérotation de variable plus efficace que simplement
+une incrémentation. J'ai donc décidé de représenter chaque Ki par un couple
+(sommet, couleur), de m'en servir comme clé dans un dictionnaire en lui associant
+comme valeur un entier unique. 
+
+_ex :_
+```python
+id = (sommet, c)
+tableCorrespondance[id]=entier_logique
+```
+
+C'est cet entier logique je met dans ma base de clause. J'ai commencé par 
+représenter l'ensemble des clauses pour les sommets, vu qu'un sommet ne peut
+avoir qu'une seule couleur. C'est ici que j'associe chaque id à un entier
+
+```python
+for sommet in range(self.g.getNbSommets()):
+    # Init de la liste pour les clauses de l'environnement
+    env = []
+
+    # Remplissage des clauses sur les sommets
+    for c in range(x):
+        entier_logique += 1
+        id = (sommet, c)
+        # On ajoute a la table notre nouveau couple
+        tableCorrespondance[id]=entier_logique
+        for entier_deja_present in env:
+            if [-entier_logique, -entier_deja_present] not in self.base and [-entier_deja_present,-entier_logique] not in self.base:
+                self.base.append([-entier_logique, -entier_deja_present])
+        env.append(entier_logique)
+    self.base.append(env)
+```
+
+
+J'ai ensuite finis de représenter l'ensemble des clauses pour les arêtes 
+vu que 2 sommets adjacents ne peuvent avoir la même couleur. Pour se faire, je 
+récupère chaque entier associé aux couples précédemment créer.
+
+```python
+for sommet in range(self.g.getNbSommets()):
+    for s in self.g.getAdjacents(sommet):
+        for c in range(x):
+            entier_1 = tableCorrespondance[sommet,c]
+            entier_2 = tableCorrespondance[s,c]
+            if [-entier_1, -entier_2] not in self.base and [-entier_2, -entier_1] not in self.base:
+                self.base.append([-entier_1,-entier_2])
+```
+
+Notons que l'on pourrait optimiser en fusionnant les 2 boucles, mais cela
+imposerait des vérifications sur la tableCorrespondance et un changement dans
+la façon de gérer l'attribution de l'entier_logique. Ma solution a passé les
+tests parfaitement. Je vais prendre un peu d'avance en commençant l'étape 2.

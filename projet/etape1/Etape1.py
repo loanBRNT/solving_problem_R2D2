@@ -52,34 +52,37 @@ class Etape1 :
         
         :param x: parametre servant pour definir la base qui representera le probleme 
         """
-        # A ECRIRE par les etudiants en utilisant le contenu de g
-        # ajout possible de parametre => modifier aussi l'appel ds le main
-
-        print(self.g)
+        #INIT
+        self.base=[]
         self.nbVariables = self.g.getNbSommets() * x
+        tableCorrespondance = {}
+        entier_logique=0
 
-        couleur=0
-        base=[]
+        #BOUCLES
         for sommet in range(self.g.getNbSommets()):
             # Init de la liste pour les clauses de l'environnement
             env = []
+
             # Remplissage des clauses sur les sommets
             for c in range(x):
-                couleur+=1 #Trouver une meilleure numérotation
-                for couleur_deja_presente in env:
-                    if [-couleur, -couleur_deja_presente] not in self.base \
-                            and [-couleur_deja_presente,-couleur] not in self.base:
-                        self.base.append([-couleur, -couleur_deja_presente])
-                env.append(couleur)
+                entier_logique += 1
+                id = (sommet, c)
+                # On ajoute a la table notre nouveau couple
+                tableCorrespondance[id]=entier_logique
+                for entier_deja_present in env:
+                    if [-entier_logique, -entier_deja_present] not in self.base and [-entier_deja_present,-entier_logique] not in self.base:
+                        self.base.append([-entier_logique, -entier_deja_present])
+                env.append(entier_logique)
             self.base.append(env)
 
-            # Remplissage des clauses pour les arrêtes
-            for sommet_adjacent in self.g.getAdjacents(sommet):
+        # Remplissage des clauses sur les aretes
+        for sommet in range(self.g.getNbSommets()):
+            for s in self.g.getAdjacents(sommet):
                 for c in range(x):
-                    #on ajoute les couples
-                    continue
-
-        print(self.base)
+                    entier_1 = tableCorrespondance[sommet,c]
+                    entier_2 = tableCorrespondance[s,c]
+                    if [-entier_1, -entier_2] not in self.base and [-entier_2, -entier_1] not in self.base:
+                        self.base.append([-entier_1,-entier_2])
     
     def execSolver(self) : 
         """
@@ -112,20 +115,20 @@ class __testEtape1__ :
         e = Etape1("../../Data/town10.txt",True)
         e.majBase(3)
         #e.affBase()
-        #print("Resultat obtenu (on attend True) :",e.execSolver())
+        print("Resultat obtenu (on attend True) :",e.execSolver())
         
-        '''
+
         # TEST 2 : town10.txt avec 2 couleurs
         print("Test sur fichier town10.txt avec 2 couleurs")
         e.majBase(2)
-        e.affBase()
+        #e.affBase()
         print("Resultat obtenu (on attend False) :",e.execSolver())
         
         
         # TEST 3 : town10.txt avec 4 couleurs
         print("Test sur fichier town10.txt avec 4 couleurs")
         e.majBase(4)
-        e.affBase()
+        #e.affBase()
         print("Resultat obtenu (on attend True) :",e.execSolver())
         
         
@@ -168,5 +171,5 @@ class __testEtape1__ :
         e.majBase(3)
         # e.affBase() ;
         print("Resultat obtenu (on attend False) :",e.execSolver())
-        '''
+
 
