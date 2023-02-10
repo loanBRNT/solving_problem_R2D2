@@ -18,14 +18,12 @@ class EtatCas1(Etat) :
 
     arrive : int
 
-    depart : int
-
     courant : int
 
     # constructeurs
     # A ECRIRE/MODIFIER/COMPLETER
     # //////////////////////////////////////////////
-    def __init__(self, tg : GrapheDeLieux, num_dep : int = 0, num_arv : int = -1) :
+    def __init__(self, tg : GrapheDeLieux, numSommet : int = 0, num_arv : int = -1) :
         """ constructeur d'un etat a partir du graphe representant le monde
         
         :param tg: graphe representant le monde
@@ -33,10 +31,9 @@ class EtatCas1(Etat) :
         :param param1: a definir eventuellement
         
         :param param2: a definir eventuellement
-        """ 
+        """
+        self.courant = numSommet
         self.tg = tg
-        self.courant = num_dep
-        self.depart = num_dep
         if num_arv == -1:
             num_arv = self.tg.getNbSommets()-1
         self.arrive = num_arv
@@ -58,7 +55,12 @@ class EtatCas1(Etat) :
         
         :return liste des etats successeurs de l'etat courant
         """
-        return self.tg.getAdjacents(self.courant)
+        liste_num = self.tg.getAdjacents(self.courant)
+        liste_sommet=[]
+
+        for n in liste_num:
+            liste_sommet.append(EtatCas1(self.tg,numSommet=n,num_arv=self.arrive))
+        return liste_sommet
     
     
     def h(self) :  
@@ -76,7 +78,7 @@ class EtatCas1(Etat) :
         
         :return cout du passage de l'etat courant à l'etat e
         """
-        return self.tg.getCoutArete(self.courant,e)
+        return self.tg.getCoutArete(self.courant,e.courant)
     
     
     def displayPath(self, pere) :
@@ -86,7 +88,10 @@ class EtatCas1(Etat) :
         """ 
         # A ECRIRE
         print("resultat trouve : ")
-    
+        e=self
+        while pere[e] != None:
+            print(e,"<-",pere[e])
+            e = pere[e]
     
     
     # methodes pour pouvoir utiliser cet objet dans des listes et des map
@@ -109,7 +114,9 @@ class EtatCas1(Etat) :
         :return true si l'etat courant et o sont egaux, false sinon
         """ 
         # A ECRIRE et MODIFIER le return en consequence
-        return False 
+        if not isinstance(o,Etat):
+            return False
+        return self.courant == o.courant
     
     
     
@@ -123,7 +130,7 @@ class EtatCas1(Etat) :
         chaine de caracteres
         """ 
         # A ECRIRE et MODIFIER le return en consequence
-        return "" 
+        return "sommet n" + str(self.courant)
     
 
 

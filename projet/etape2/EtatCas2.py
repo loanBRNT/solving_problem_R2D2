@@ -14,12 +14,18 @@ class EtatCas2(Etat) :
     # A COMPLETER
     # //////////////////////////////////////////////
     tg : GrapheDeLieux
-    """ le graphe representant le monde """ 
+    """ le graphe representant le monde """
+
+    courant : int
+
+    arrive : int
+
+    liste_parents : list(int)
     
     # constructeurs
     # A ECRIRE/MODIFIER/COMPLETER
     # //////////////////////////////////////////////
-    def __init__(self, tg : GrapheDeLieux, param1 = None, param2 = None) :
+    def __init__(self, tg : GrapheDeLieux, dep : int = 0, ar :int = 0,l_visite = []) :
         """ constructeur d'un etat a partir du graphe representant le monde
         
         :param tg: graphe representant le monde
@@ -29,6 +35,11 @@ class EtatCas2(Etat) :
         :param param2: a definir eventuellement
         """ 
         self.tg = tg
+        self.courant = dep
+        self.arrive = ar
+
+        self.liste_parents = l_visite
+        self.liste_parents.append(self)
         # a completer pour tenir compte de la presence ou pas des deux derniers parametres
      
     
@@ -40,7 +51,10 @@ class EtatCas2(Etat) :
         :return true si l'etat courant est une solution, false sinon
         """ 
         # A ECRIRE et MODIFIER le return en consequence
-        return false 
+        if self.courant == self.arrive:
+            if len(self.liste_parents) == self.tg.getNbSommets():
+                return True
+        return False
     
     
     def successeurs(self) :
@@ -49,7 +63,13 @@ class EtatCas2(Etat) :
         :return liste des etats successeurs de l'etat courant
         """ 
         # A ECRIRE et MODIFIER le return en consequence
-        return [] 
+        liste_num = self.tg.getAdjacents(self.courant)
+        liste_sommet = []
+
+        for n in liste_num:
+            e = EtatCas2(self.tg, n, self.arrive, l_visite=self.liste_parents)
+            liste_sommet.append(e)
+        return liste_sommet
     
     
     def h(self) :  

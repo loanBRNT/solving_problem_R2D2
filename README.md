@@ -100,3 +100,22 @@ tests parfaitement. Je vais prendre un peu d'avance en commençant l'étape 2.
 L'étape 2 est un peu plus lourde à comprendre, j'ai complété quelques fonctions
 évidentes. Je réserve la séance prochaine à l'élaboration de l'algo pour
 déterminer le plus court chemin entre 2 lieux.
+
+### 10/02 - 2H
+
+J'ai passé la première demi-heure à analyser le code du solverAStar afin de comprendre
+précisément ce qui était attendu en retour de chaque fonction. J'ai donc modifié les fonctions
+que j'avais faites à la séance précédente. J'ai choisi de représenter un état de l'espace par
+le graphe représentant le monde, le numero du sommet d'arrivée et le numero du sommet 
+correspondant à l'état.
+
+```python
+tg : GrapheDeLieux
+""" le graphe representant le monde """ 
+
+arrive : int
+
+courant : int
+```
+
+Il me reste une demi-heure, je commence à réfléchir au cas 2.

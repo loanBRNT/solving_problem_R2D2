@@ -38,20 +38,19 @@ class SolverAStar :
         #    aux valeurs de f, g et au pere
         f : dict = {}      # HashMap<Etat, Double>()
         g : dict = {}      # HashMap<Etat, Double>()
-        pere : dict = {}   # HashMap<Etat, Etat>()
+        pere : dict = {}  # HashMap<Etat, Etat>()
         f[e] = 0
         g[e] = 0
         pere[e] = None
         AF.append(e)
         SolverAStar.__nbEtatsGeneres__ =  SolverAStar.__nbEtatsGeneres__ + 1
         while len(AF) != 0 :
-            
             courant = SolverAStar.__getBest__(AF, f)
             SolverAStar.__nbEtatsExplores__ =  SolverAStar.__nbEtatsExplores__ + 1
             
             gcourant = g[courant] #    poids de courant
 
-            if (courant.estSolution()) :
+            if courant.estSolution():
                 courant.displayPath(pere) 
                 print("la lg du plus court chemin est ",g[courant]) 
                 SolverAStar.__affMetrique__(courant) 
@@ -60,10 +59,9 @@ class SolverAStar :
             lesFils = courant.successeurs() 
             SolverAStar.__nbEtatsGeneres__ = SolverAStar.__nbEtatsGeneres__ + len(lesFils)           
             for s in lesFils :
-                
                 #    poids de courant + (poids successeur - poids courant)
                 gsuivant = gcourant + courant.k(s)
-                if ( s not in g ) :                    
+                if s not in g:
                     #    nouvel etat 
                     #    donc mise a jour des tables de hachage et de AF
                     g[s] = gsuivant
@@ -163,7 +161,7 @@ class SolverAStar :
          decroissant impose par f """    
         val = f[s] 
         i = 0
-        while (i < len(AF) and (f[AF[i]] > val)) :
+        while i < len(AF) and (f[AF[i]] > val):
            i = i + 1
         if i == len(AF) :
            AF.append(s) 
