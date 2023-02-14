@@ -28,9 +28,9 @@ class EtatCas1(Etat) :
         
         :param tg: graphe representant le monde
         
-        :param param1: a definir eventuellement
+        :param numSommet: numero du sommet courant
         
-        :param param2: a definir eventuellement
+        :param num_arv: numero de l'arrivee
         """
         self.courant = numSommet
         self.tg = tg

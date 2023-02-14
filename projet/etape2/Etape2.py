@@ -77,11 +77,11 @@ class Etape2:
         # tests sur CAS 2 : tour complet par voie de terre
         # ///////////////////////////////////////////
         # cas : 10 villes de 0 à 9
-        tg = GrapheDeLieux.loadGraph("Data/town10.txt", True)
+        tg = GrapheDeLieux.loadGraph("../../Data/town10.txt", True)
         cas2 = EtatCas2(tg)
         print("======== TEST CAS 2 10 villes de 0 a 9 : \n")
         # choisir ici un algo et l'executer
-
+        SolverAStar.aStarOpti(cas2)
         '''
         # ///////////////////////////////////////////////
         # tests sur CAS 3 : tour complet par voie des airs

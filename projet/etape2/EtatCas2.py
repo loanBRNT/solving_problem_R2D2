@@ -19,13 +19,11 @@ class EtatCas2(Etat) :
     courant : int
 
     arrive : int
-
-    liste_parents : list(int)
     
     # constructeurs
     # A ECRIRE/MODIFIER/COMPLETER
     # //////////////////////////////////////////////
-    def __init__(self, tg : GrapheDeLieux, dep : int = 0, ar :int = 0,l_visite = []) :
+    def __init__(self, tg : GrapheDeLieux, dep : int = 0, ar :int = 0, l_visite=None) :
         """ constructeur d'un etat a partir du graphe representant le monde
         
         :param tg: graphe representant le monde
@@ -33,13 +31,17 @@ class EtatCas2(Etat) :
         :param param1: a definir eventuellement
         
         :param param2: a definir eventuellement
-        """ 
+        """
+
         self.tg = tg
         self.courant = dep
         self.arrive = ar
+        self.liste_parents = []
+        if l_visite is not None:
+            for n in l_visite:
+                self.liste_parents.append(n)
 
-        self.liste_parents = l_visite
-        self.liste_parents.append(self)
+        self.liste_parents.append(self.courant)
         # a completer pour tenir compte de la presence ou pas des deux derniers parametres
      
     
@@ -52,7 +54,7 @@ class EtatCas2(Etat) :
         """ 
         # A ECRIRE et MODIFIER le return en consequence
         if self.courant == self.arrive:
-            if len(self.liste_parents) == self.tg.getNbSommets():
+            if len(self.liste_parents) >= self.tg.getNbSommets():
                 return True
         return False
     
@@ -61,14 +63,19 @@ class EtatCas2(Etat) :
         """ methode permettant de recuperer la liste des etats successeurs de l'etat courant
         
         :return liste des etats successeurs de l'etat courant
-        """ 
-        # A ECRIRE et MODIFIER le return en consequence
+        """
+
         liste_num = self.tg.getAdjacents(self.courant)
         liste_sommet = []
 
         for n in liste_num:
-            e = EtatCas2(self.tg, n, self.arrive, l_visite=self.liste_parents)
-            liste_sommet.append(e)
+            if not n in self.liste_parents:
+                e = EtatCas2(self.tg, n, self.arrive, l_visite=self.liste_parents)
+                print(n)
+                liste_sommet.append(e)
+            if n == self.arrive and len(self.liste_parents) == self.tg.getNbSommets():
+                return [EtatCas2(self.tg, n, self.arrive, l_visite=self.liste_parents)]
+
         return liste_sommet
     
     
@@ -76,9 +83,8 @@ class EtatCas2(Etat) :
         """ methode permettant de recuperer l'heuristique de l'etat courant 
         
         :return heuristique de l'etat courant
-        """ 
-        # A ECRIRE et MODIFIER le return en consequence
-        return 0 
+        """
+        return GrapheDeLieux.dist(self.courant,self.arrive,self.tg) * (self.tg.getNbSommets() - len(self.liste_parents))
     
     
     def k(self, e) :
@@ -87,18 +93,18 @@ class EtatCas2(Etat) :
         :param e: un etat
         
         :return cout du passage de l'etat courant à l'etat e
-        """ 
-        # A ECRIRE et MODIFIER le return en consequence
-        return 0 
+        """
+        return self.tg.getCoutArete(self.courant,e.courant)
     
     
-    def displayPath(self, pere) :
+    def displayPath(self) :
         """ methode pour afficher le chemin qui a mene a l'etat courant en utilisant la map des peres
         
         :param pere: map donnant pour chaque etat, son pere 
-        """ 
-        # A ECRIRE
+        """
         print("resultat trouve : ")
+        for e in self.liste_parents:
+            print(e)
     
     
     
@@ -120,9 +126,20 @@ class EtatCas2(Etat) :
         :param o: l'objet avec lequel on compare
         
         :return true si l'etat courant et o sont egaux, false sinon
-        """ 
-        # A ECRIRE et MODIFIER le return en consequence
-        return False 
+        """
+        if not isinstance(o, Etat):
+            return False
+        if self.courant != o.courant:
+            return False
+        if len(self.liste_parents) != len(o.liste_parents):
+            return False
+
+        constante = True
+        for i in range(len(self.liste_parents)):
+            if self.liste_parents[i] != o.liste_parents[i]:
+                constante=False
+
+        return constante
     
     
     
@@ -136,7 +153,7 @@ class EtatCas2(Etat) :
         chaine de caracteres
         """ 
         # A ECRIRE et MODIFIER le return en consequence
-        return "" 
+        return "sommet n" + str(self.courant)
     
 
 

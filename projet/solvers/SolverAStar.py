@@ -45,10 +45,16 @@ class SolverAStar :
         AF.append(e)
         SolverAStar.__nbEtatsGeneres__ =  SolverAStar.__nbEtatsGeneres__ + 1
         while len(AF) != 0 :
+            '''
+            print("===================")
+            for e in AF:
+                print(e.courant)
+            print("===================")
+            '''
             courant = SolverAStar.__getBest__(AF, f)
             SolverAStar.__nbEtatsExplores__ =  SolverAStar.__nbEtatsExplores__ + 1
             
-            gcourant = g[courant] #    poids de courant
+            gcourant = g[courant] #poids de courant
 
             if courant.estSolution():
                 courant.displayPath(pere) 

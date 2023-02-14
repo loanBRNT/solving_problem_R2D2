@@ -118,4 +118,78 @@ arrive : int
 courant : int
 ```
 
+J'ai choisis de définir l'heuristique comme la distance de l'état courant à l'état d'arrivée
+```python
+    def h(self) :  
+        """ methode permettant de recuperer l'heuristique de l'etat courant 
+        
+        :return heuristique de l'etat courant
+        """
+        return GrapheDeLieux.dist(self.courant,self.arrive,self.tg)
+```
+
+Enfin, j'estime qu'un état est solution si l'état courant = l'état d'arrivée
+
+Cette représentation a bien fonctionné. J'ai eu un petit bug de boucle infinie due au equal que j'ai du réécrire.
+
 Il me reste une demi-heure, je commence à réfléchir au cas 2.
+
+### 14/02 - 2H
+
+J'ai passé 1h15 sur le cas 2. Les paramètres que j'utilise pour ce cas 2 :
+```python
+    self.tg = tg #le graphe du monde
+    self.courant = dep #l'etat courant
+    self.arrive = ar #l'etat d'arrivee
+    self.liste_parents = [] #la liste des sommets qui ont conduis au courant
+    if l_visite is not None:
+        for n in l_visite:
+           self.liste_parents.append(n)
+
+    self.liste_parents.append(self.courant)
+```
+
+Ensuite, il fallait redéfinir mon heuristique et ma solution.
+
+Le nouvel heuristique d'un état est la distance qui le sépare de l'arrivée multipliée par
+le nombre de sommets qu'il reste à visiter.
+```python
+    def h(self) :  
+        """ methode permettant de recuperer l'heuristique de l'etat courant 
+        
+        :return heuristique de l'etat courant
+        """
+        return GrapheDeLieux.dist(self.courant,self.arrive,self.tg) * (self.tg.getNbSommets() - len(self.liste_parents))
+```
+
+Un état est solution s'il a le même état courant que l'arrivée et que la longueur de sa liste_parents
+est plus grand ou égal que le nombre de sommets du graphe. (plus grand ou égal car on y ajoute 2 fois le point de départ :
+au moment où il part et au moment où il y arrive)
+
+La sélection des sucesseurs changent par rapport au cas 1. (J'ai fait le choix d'ajouter à la liste_parent le sommet courant
+dans le init). Pour chaque adjacent, on initialise des nouveaux états en vérifiant s'ils n'ont pas déjà été la liste_parents 
+de l'état courant. Enfin, si la liste des etats visités est pleine et que l'état arrivée est un adjacent de l'état courant, 
+alors on renvoie simplement le futur état solution.
+
+```python
+    def successeurs(self) :
+        """ methode permettant de recuperer la liste des etats successeurs de l'etat courant
+        
+        :return liste des etats successeurs de l'etat courant
+        """
+
+        liste_num = self.tg.getAdjacents(self.courant)
+        liste_sommet = []
+
+        for n in liste_num:
+            if not n in self.liste_parents:
+                e = EtatCas2(self.tg, n, self.arrive, l_visite=self.liste_parents)
+                print(n)
+                liste_sommet.append(e)
+            if n == self.arrive and len(self.liste_parents) == self.tg.getNbSommets():
+                return [EtatCas2(self.tg, n, self.arrive, l_visite=self.liste_parents)]
+
+        return liste_sommet
+```
+
+Je prends un peu d'avance et je lie le cas3.
