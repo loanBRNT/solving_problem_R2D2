@@ -71,8 +71,8 @@ class Etape2:
         print("======== TEST CAS 1 1000 villes : \n")
         # choisir ici un algo et l'executer
         SolverAStar.aStar(cas1)
-        '''
-
+        
+        
         # ///////////////////////////////////////////////
         # tests sur CAS 2 : tour complet par voie de terre
         # ///////////////////////////////////////////
@@ -87,38 +87,39 @@ class Etape2:
         # tests sur CAS 3 : tour complet par voie des airs
         # ///////////////////////////////////////////////
         # cas : 6 villes de 0 à 5
-        tg = GrapheDeLieux.loadGraph("Data/town6.txt",True) 
+        tg = GrapheDeLieux.loadGraph("../../Data/town6.txt",True)
         cas3 = EtatCas3(tg) 
         print("======== TEST CAS 3 6 villes de 0 a 5 : \n")
-        # choisir ici un algo et l'executer 
-                                                        
+        # choisir ici un algo et l'executer
+        SolverAStar.aStarOpti(cas3)
+
         # cas : 7 villes de 0 à 6
-        tg = GrapheDeLieux.loadGraph("Data/town7.txt",True) 
+        tg = GrapheDeLieux.loadGraph("../../Data/town7.txt",True) 
         cas3 = EtatCas3(tg) 
         print("======== TEST CAS 3 7 villes de 0 a 6 : \n")
         # choisir ici un algo et l'executer 
-        
+        SolverAStar.aStarOpti(cas3)
         # cas : 8 villes de 0 à 7
-        tg = GrapheDeLieux.loadGraph("Data/town8.txt",True) 
+        tg = GrapheDeLieux.loadGraph("../../Data/town8.txt",True) 
         cas3 = EtatCas3(tg) 
         print("======== TEST CAS 3 8 villes de 0 a 7 : \n")
         # choisir ici un algo et l'executer                         
-        
+        SolverAStar.aStarOpti(cas3)
         # cas : 9 villes de 0 à 8
-        tg = GrapheDeLieux.loadGraph("Data/town9.txt",True) 
+        tg = GrapheDeLieux.loadGraph("../../Data/town9.txt",True) 
         cas3 = EtatCas3(tg) 
         print("======== TEST CAS 3 9 villes de 0 a 8 : \n")
         # choisir ici un algo et l'executer                          
-        
+        SolverAStar.aStarOpti(cas3)
         # cas : 10 villes de 0 à 9
-        tg = GrapheDeLieux.loadGraph("Data/town10.txt",True) 
+        tg = GrapheDeLieux.loadGraph("../../Data/town10.txt",True) 
         cas3 = EtatCas3(tg) 
         print("======== TEST CAS 3 10 villes de 0 a 9 : \n")
         # choisir ici un algo et l'executer                          
-        
+        SolverAStar.aStarOpti(cas3)
         # cas : 11 villes de 0 à 10
-        tg = GrapheDeLieux.loadGraph("Data/town11.txt",True) 
+        tg = GrapheDeLieux.loadGraph("../../Data/town11.txt",True) 
         cas3 = EtatCas3(tg) 
         print("======== TEST CAS 3 11 villes de 0 a 10 : \n")
          # choisir ici un algo et l'executer                                    
-        '''
+        SolverAStar.aStarOpti(cas3)

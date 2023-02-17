@@ -193,3 +193,44 @@ alors on renvoie simplement le futur état solution.
 ```
 
 Je prends un peu d'avance et je lie le cas3.
+
+### 17/02 - 2H
+
+Je me suis aperçu que mon heuristique n'était pas admissible. Car j'utilisais la distance entre le départ et l'arrivée
+et que je la multipliais par le nombre de sommets restants. L'heuristique est censé être une estimation du coût. Dans mon
+cas, l'estimation est fausse même si les résultats étaient justes. 
+
+Ma première idée fut de moyénnée les distances entre le sommet et les autres sommets non-visités. Mais ce résultat n'est
+pas admissible car on utilise une moyenne.
+
+J'ai décidé de remplacer mon heuristique dans le cas 2 par :
+```python
+    def h(self) :  
+        return self.tg.getPoidsMinTerre() * (self.tg.getNbSommets() - len(self.liste_parents))
+```
+La fonction getPoidsMinTerre nous renvoie le coût de l'arrête minimale. Même si notre estimation n'est pas forcément juste
+elle reste admissible.
+
+Ensuite je suis passé au cas 3, le cas est relativement simple car il découle du 2. La principale modification est à faire
+sur le retour des sucesseurs. On ne souhaite plus avoir uniquement les adjacents, mais tous les sommets en retirant ceux
+déjà visitées uniquement. 
+```python
+        def successeurs(self) :
+        liste_num = self.tg.getAdjacents(self.courant)
+        liste_sommet = []
+
+        for n in liste_num:
+            if not n in self.liste_parents:
+                e = EtatCas2(self.tg, n, self.arrive, l_visite=self.liste_parents)
+                liste_sommet.append(e)
+            if n == self.arrive and len(self.liste_parents) == self.tg.getNbSommets():
+                return [EtatCas2(self.tg, n, self.arrive, l_visite=self.liste_parents)]
+
+        return liste_sommet
+```
+La fonction heuristique est adaptée aussi en utilisant getPoidsMinAir() au lieu de getPoidsMinTerre().
+
+Cependant, l'algo mouline dès qu'on dépasse 8 villes. Le problème est très complexe, j'utilise python (qui est pas le 
+plus opti) et on ne fait aucun thread parrallèle donc rien d'alarmant.
+
+Fin du cas 3, il me reste 30 minutes. Je vais commencer à regarder l'étape 3.

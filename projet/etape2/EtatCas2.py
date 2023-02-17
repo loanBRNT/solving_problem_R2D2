@@ -19,11 +19,13 @@ class EtatCas2(Etat) :
     courant : int
 
     arrive : int
+
+
     
     # constructeurs
     # A ECRIRE/MODIFIER/COMPLETER
     # //////////////////////////////////////////////
-    def __init__(self, tg : GrapheDeLieux, dep : int = 0, ar :int = 0, l_visite=None) :
+    def __init__(self, tg : GrapheDeLieux, dep : int = 0, ar:int =0, l_visite=None) :
         """ constructeur d'un etat a partir du graphe representant le monde
         
         :param tg: graphe representant le monde
@@ -71,7 +73,6 @@ class EtatCas2(Etat) :
         for n in liste_num:
             if not n in self.liste_parents:
                 e = EtatCas2(self.tg, n, self.arrive, l_visite=self.liste_parents)
-                print(n)
                 liste_sommet.append(e)
             if n == self.arrive and len(self.liste_parents) == self.tg.getNbSommets():
                 return [EtatCas2(self.tg, n, self.arrive, l_visite=self.liste_parents)]
@@ -84,7 +85,7 @@ class EtatCas2(Etat) :
         
         :return heuristique de l'etat courant
         """
-        return GrapheDeLieux.dist(self.courant,self.arrive,self.tg) * (self.tg.getNbSommets() - len(self.liste_parents))
+        return self.tg.getPoidsMinTerre() * (self.tg.getNbSommets() - len(self.liste_parents))
     
     
     def k(self, e) :
