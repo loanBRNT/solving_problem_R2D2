@@ -274,6 +274,8 @@ Voici les résultats de ma première batterie de tests :
 | 10       | 36192.04               | 39511.43            | 284223.16               | 278286.95            |
 | 100      | 32574.39               | 38945.34            | 243503.33               | 277252.16            |
 | 1000     | -                      | -                   | -                       | -                    |
+
+
 A première vue, Tabou semble plus performant que HC. J'avais déjà fait une première sélection entre les HC, en choisissant
 de tirer une solution aléatoire après chaque essai, car cela donnait de meilleurs résultats que repartir avec un voisin
 de la solution courante. Le nombre d'essai semble important, surtout dans des grands graphes et avec le sovlerTabou. 
