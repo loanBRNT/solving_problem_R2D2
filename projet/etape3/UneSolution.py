@@ -56,13 +56,27 @@ class UneSolution(Solution):
 
         out=[]
 
+
+        #VERSION 1
         for sommet in self.ordre_visite[1:len(self.ordre_visite)-2]:
             liste = self.ordre_visite.copy()
             indice = liste.index(sommet)
             liste.remove(sommet)
             liste.insert(indice+1,sommet)
             out.append(UneSolution(self.tg,depart=self.dep,l_ordre_visite=liste))
-
+        '''
+        #VERSION 2
+        temp_out=[self.ordre_visite]
+        for sommet in self.ordre_visite[1:len(self.ordre_visite)-1]:
+            liste = self.ordre_visite.copy()
+            liste.remove(sommet)
+            for indice in range(1,len(liste)-1):
+                l = liste.copy()
+                l.insert(indice,sommet)
+                if not l in temp_out:
+                    temp_out.append(l)
+                    out.append(UneSolution(self.tg,depart=self.dep,l_ordre_visite=l))
+        '''
         return out
 
     def unVoisin(self):

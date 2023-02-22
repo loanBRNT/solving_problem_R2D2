@@ -38,7 +38,7 @@ class Etape3 :
 
         print("======== Solver 2 pour 26 villes de 0 a 25 : \n")
         SolverHC.hilClimbing2(tsp,N)
-                                   
+
 
         #    ///////////////////
         #    cas 3 : 150 villes 
@@ -60,5 +60,4 @@ class Etape3 :
 
         print("======== Solver 2 pour 1000 villes : \n")
         SolverHC.hilClimbing2(tsp,N)
-    
 
