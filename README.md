@@ -264,27 +264,27 @@ Voici les résultats de ma première batterie de tests :
 |----------|-----------------------|--------------------|-----------------------|--------------------|
 | 1        | 3241.51               | 3362.79            | 7164.43               | 7929.22            |
 | 10       | 2633.38               | 2472.02            | 6307.56               | 7533.57            |
-| 100      | 2026.27               | 2394.96            | 5972.96               | 6218.85            |
+| 100      | 2026.27               | 2394.96            | 5972.96               | 5719.21            |
 | 1000     | 2026.27               | 2228.01            | 5278.56               | 5646.05            |
 
 
 | nb Essai | SolverTabou 150 villes | SolverHc 150 villes | SolverTabou 1000 villes | SolverHc 1000 villes |
 |----------|------------------------|---------------------|-------------------------|----------------------|
-| 1        | 41951.04               | 42602.86            | 283221.77               | 283777.36            |
-| 10       | 36192.04               | 39511.43            | 284223.16               | 278286.95            |
-| 100      | 32574.39               | 38945.34            | 243503.33               | 277252.16            |
+| 1        | 41951.04               | 40850.86            | 283221.77               | 283777.36            |
+| 10       | 36192.04               | 32376.78            | 284223.16               | 278286.95            |
+| 100      | 32574.39               | 29731.48            | 267252.16               | 243503.33            |
 | 1000     | -                      | -                   | -                       | -                    |
 
 
-A première vue, Tabou semble plus performant que HC. J'avais déjà fait une première sélection entre les HC, en choisissant
-de tirer une solution aléatoire après chaque essai, car cela donnait de meilleurs résultats que repartir avec un voisin
-de la solution courante. Le nombre d'essai semble important, surtout dans des grands graphes et avec le sovlerTabou. 
-Avec HC, l'augmentation semble "moins" impactante. Avant de conclure définitivement et parce que j'ai du temps, je vais
+A première vue, Tabou semble plus performant que HC pour les petits graphes et HC que Tabou pour les plus grands. 
+J'avais déjà fait une première sélection entre les HC, en choisissant de tirer une solution aléatoire après chaque essai, 
+car cela donnait de meilleurs résultats que repartir avec un voisin de la solution courante. Le nombre d'essais semble 
+important, surtout dans des grands graphes. Avant de conclure définitivement et parce que j'ai du temps, je vais
 essayer de définir autrement mon mouvement entre les solutions et ses voisins.
 
 La nouvelle version considère qu'une solution est voisine d'une autre si un seul sommet à changer de place dans l'ordre
 de visite. Exemple [0-1-2-3-0] a pour voisin [0-2-1-3-0], [0-2-3-1-0], [0-1-3-2-0],[0-3-1-2-0] MAIS PAS [0-3-2-1-0]
-Avec cette solution, j'ai espoirt d'avoir de meilleurs résultats sur les graphes plus complexes, car chaque solution
+Avec cette solution, j'ai espoir d'avoir de meilleurs résultats sur les graphes plus complexes, car chaque solution
 aura + de voisins, mais le temps d'exécution risque d'être vraiment plus long pour un même nombre d'essai. L'idéal serait
 d'obtenir un résultat au moins aussi bon avec un nombre d'essai inférieur
 
@@ -306,11 +306,10 @@ d'obtenir un résultat au moins aussi bon avec un nombre d'essai inférieur
 
 
 Pour les graphes 150/1000 villes, je pense qu'il y a trop de voisins et que l'algo prend trop de temps à tester chaque
-voisins. Même les résultats pour N=1 ne sont pas obtenus via mon ordinateur.
+voisin. Même les résultats pour N=1 ne sont pas obtenus via mon ordinateur.
 
 Un peu déçu de cette nouvelle solution, je vais rester sur la première solution. Elle représente un bon compromis entre 
 temps d'exécution et performance. Un nombre d'essais compris entre 100 (grand graphe) et 1000 (petits graphe)
-permet d'obtenir un résultat satisfaisant avec le solverTabou de préférence qui a l'air plus "constant" dans
-les résultats au fil des tests.
-
-Il me reste un peu plus d'une heure, je vais m'attaquer à l'étape 4.
+permet d'obtenir un résultat satisfaisant. Concernant le choix du solver, je pense qu'il faudrait tenir compte de la
+taille de notre graphe : s'il est petit solverTabou de préférence qui a l'air plus "constant" et est plus rapide, si
+le graphe est grand et qu'on dispose d'une puissance de calcul suffisant HC semble être une bonne solution.

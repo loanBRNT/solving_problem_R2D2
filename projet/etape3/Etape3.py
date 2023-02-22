@@ -16,7 +16,7 @@ class Etape3 :
     """  methode de TESTS pour Etape3
     """ 
     if __name__ == '__main__':
-        N=100
+        N=10
         #    tests sur Etape 3
         #    ///////////////////
         #    cas 1 : 10 villes de 0 à 9
@@ -27,6 +27,9 @@ class Etape3 :
 
         print("======== Solver 2 pour 10 villes de 0 a 9 : \n")
         SolverHC.hilClimbing2(tsp,N)
+
+        print("======== Solver 3 pour 10 villes de 0 a 9 : \n")
+        SolverHC.hilClimbing(tsp, N)
 
 
         #    ///////////////////
@@ -39,6 +42,9 @@ class Etape3 :
         print("======== Solver 2 pour 26 villes de 0 a 25 : \n")
         SolverHC.hilClimbing2(tsp,N)
 
+        print("======== Solver 3 pour 26 villes de 0 a 25 : \n")
+        SolverHC.hilClimbing(tsp, N)
+
 
         #    ///////////////////
         #    cas 3 : 150 villes 
@@ -49,6 +55,9 @@ class Etape3 :
 
         print("======== Solver 2 pour 150 villes : \n")
         SolverHC.hilClimbing2(tsp,N)
+
+        print("======== Solver 3 pour 150 villes: \n")
+        SolverHC.hilClimbing(tsp, N)
                                    
                                    
         #    ///////////////////

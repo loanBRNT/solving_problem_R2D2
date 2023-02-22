@@ -85,7 +85,12 @@ class UneSolution(Solution):
         :return voisin de la solution courante
         """
         voisins = self.lesVoisins()
-        indice = random.randint(0,len(voisins)-1)
+        indice=0
+        min= voisins[0].eval()
+        for i in range(1,len(voisins)):
+            e = voisins[i].eval()
+            if e < min:
+                indice = i
         return [voisins[indice]]
 
     def eval(self):
