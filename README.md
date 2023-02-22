@@ -230,7 +230,52 @@ déjà visitées uniquement.
 ```
 La fonction heuristique est adaptée aussi en utilisant getPoidsMinAir() au lieu de getPoidsMinTerre().
 
-Cependant, l'algo mouline dès qu'on dépasse 8 villes. Le problème est très complexe, j'utilise python (qui est pas le 
+Cependant, l'algo mouline dès qu'on dépasse 8 villes. Le problème est très complexe, j'utilise python (qui n'est pas le 
 plus opti) et on ne fait aucun thread parrallèle donc rien d'alarmant.
 
-Fin du cas 3, il me reste 30 minutes. Je vais commencer à regarder l'étape 3.
+Fin du cas 3,et donc de l'étape 2
+
+### 21/02 - 2H
+
+Début de l'étape 3, j'ai passé la séance à choisir mes solvers (solverHC et solverTabou), à reprendre le cours
+sur les méthodes incomplètes et à regarder le code afin de mieux saisir le sujet et réfléchir à un bon moyen de *
+représenter un état solution pour mon graphe. Je vais donc définir chacun des aspects de ma méthode incomplète :
+
+**Etat solution :** J'ai besoin de moins informations dans chaque état ici que dans un graphe d'état classique. Je n'ai 
+besoin qu'uniquement de la liste des villes visitées et de mon graphe de Lieu. 
+
+**Solution optimale :** Cela sera mon état solution avec l'_eval_ la plus faible. 
+
+**Fonction d'eval :** Un état solution sera évaluée par rapport à la distance totale parcourue en suivant son chemin.
+
+**Mouvement :** Je définis mon mouvement comme le changement d'ordre de deux villes consécutives. Exemple [0-1-2-3-0] 
+a pour voisin [0-2-1-3-0] et [0-1-3-2-0]. On ne change pas le départ et l'arrivée.
+
+Demain j'implemente ma solution
+
+### 22/02 - 4H
+
+J'ai consacré la première heure et demie à l'implémentation et aux tests. Par rapport à la séance précédente, j'ai
+ajouté un attribut supplémentaire afin de pouvoir optionnellement changer de point de départ.
+
+Voici les résultats de ma première batterie de tests :
+
+| nb Essai | SolverTabou 10 villes | SolverHc 10 villes | SolverTabou 26 villes | SolverHc 26 villes |
+|----------|-----------------------|--------------------|-----------------------|--------------------|
+| 1        | 3241.51               | 3362.79            | 7164.43               | 7929.22            |
+| 10       | 2633.38               | 2472.02            | 6307.56               | 7533.57            |
+| 100      | 2026.28               | 2394.96            | 5972.96               | 6218.85            |
+| 1000     | 2026.28               | 2228.01            | 5278.56               | 5646.05            |
+
+
+| nb Essai | SolverTabou 100 villes | SolverHc 100 villes | SolverTabou 1000 villes | SolverHc 1000 villes |
+|----------|------------------------|---------------------|-------------------------|----------------------|
+| 1        | 41951.04               | 42602.86            | 283221.77               | 283777.36            |
+| 10       | 36192.04               | 39511.43            | 284223.16               | 278286.95            |
+| 100      | 32574.39               | 38945.34            | 243503.33               | 277252.16            |
+
+A première vue, Tabou semble plus performant que HC. J'avais déjà fait une première sélection entre les HC, en choisissant
+de tirer une solution aléatoire après chaque essai, car cela donnait de meilleurs résultats que repartir avec un voisin
+de la solution courante. Le nombre d'essai semble important, surtout dans des grands graphes et avec le sovlerTabou. 
+Avec HC, l'augmentation semble "moins" impactante. Avant de conclure définitivement et parce que j'ai du temps, je vais
+essayer de définir autrement mon mouvement entre les solutions et ses voisins.
