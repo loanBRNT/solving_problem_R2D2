@@ -308,8 +308,27 @@ d'obtenir un résultat au moins aussi bon avec un nombre d'essai inférieur
 Pour les graphes 150/1000 villes, je pense qu'il y a trop de voisins et que l'algo prend trop de temps à tester chaque
 voisin. Même les résultats pour N=1 ne sont pas obtenus via mon ordinateur.
 
+Cependant, on voit qu'avec cette modélisation-là, TABOU offre des performances largement meilleures qu'avant et que HC.
+
 Un peu déçu de cette nouvelle solution, je vais rester sur la première solution. Elle représente un bon compromis entre 
-temps d'exécution et performance. Un nombre d'essais compris entre 100 (grand graphe) et 1000 (petits graphe)
-permet d'obtenir un résultat satisfaisant. Concernant le choix du solver, je pense qu'il faudrait tenir compte de la
-taille de notre graphe : s'il est petit solverTabou de préférence qui a l'air plus "constant" et est plus rapide, si
-le graphe est grand et qu'on dispose d'une puissance de calcul suffisant HC semble être une bonne solution.
+temps d'exécution et performance. Un nombre d'essais compris entre 100 (grand graphe) et 1000 (petits graphes)
+permet d'obtenir un résultat satisfaisant. Concernant le choix du solver, je pense qu'il faudrait opter pour le solverTabou.
+Il a l'air d'être plus "constant" et peut conduire à de meilleurs résultats que le HC.
+
+### 08/03 - 4H
+
+Sur la première demi-heure, je me suis occupé de l'étape 4. Il s'agit d'un problème de coloration. L'encodage du problème
+peut se faire via la forme d'un graphe de contrainte. 
+
+**L'ensemble des variables :** Les sommets du graphe.
+
+**Le domaine des variables :** Les couleurs que peuvent prendre un sommet = Toutes les couleurs disponibles.
+
+**L'ensemble des contraintes :** L'ensemble des sous-ensembles de doublons de valeurs autorisés pour un couple de 
+sommets adjacents. = Un sous-ensemble par arrète du graphe.
+
+J'ai choisi d'utiliser le solveurCSP pour résoudre ce problème. Les résultats sont tous obtenus et sont bons.
+
+Sur la suite de la séance, je m'attaque à la séance 5. Je garde la partie bonus pour la dernière séance. J'ai passé 1
+bonne heure sur l'installation du solver SCIP à comprendre un peu mieux le fonctionnement du solver, 
+son utilité et comment s'en servir.
