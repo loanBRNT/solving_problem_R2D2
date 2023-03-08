@@ -25,14 +25,23 @@ réaliser son travail.
 
 ## Journal de Bord
 
+#### Avant propos
+
+Ce journal de bord a été écrit dans le dernier quart d'heure de chaque séance. Certaines modélisations évoluent de séance
+en séance. L'archive comprend de toute façon les dernières versions de chaque modélisation.
+
+L'ensemble du travail a été réalisé en solo. Les séances du 21/02 et 22/02 ont étaient réalisées à distance.
+
+BONNE LECTURE
+
 ### 31/01 - 2H
 
 L'objectif de la séance était d'installer le projet et de le prendre en main.
-Il a fallut regarder l'ensemble des nombreuses documentations et corriger
+Il a fallu regarder l'ensemble des nombreuses documentations et corriger
 quelques petites erreurs dans le code pour réussir à compiler.
 
 Dans un second temps, il fallait regarder la documentation du solveur 
-pour se familiariser avec. Puis, on commence à modéliser le problème.
+pour se familiariser avec. Puis, commencer à modéliser le problème.
 
 Soit notre graphe de *i* sommets, on a à disposition *N* couleurs. 
 DONC, une variable de notre encodage en logique propositionnelle sera représentée par
@@ -45,7 +54,7 @@ Il faut que j'améliore la numérotation de mes variables.
 
 L'objectif des 2 heures était de terminer l'étape 1. J'ai donc commencé 
 à réfléchir à une méthode de numérotation de variable plus efficace que simplement
-une incrémentation. J'ai donc décidé de représenter chaque Ki par un couple
+une incrémentation. J'ai décidé de représenter chaque Ki par un couple
 (sommet, couleur), de m'en servir comme clé dans un dictionnaire en lui associant
 comme valeur un entier unique. 
 
@@ -55,7 +64,7 @@ id = (sommet, c)
 tableCorrespondance[id]=entier_logique
 ```
 
-C'est cet entier logique je met dans ma base de clause. J'ai commencé par 
+C'est cet entier logique que je mets dans ma base de clause. J'ai commencé par 
 représenter l'ensemble des clauses pour les sommets, vu qu'un sommet ne peut
 avoir qu'une seule couleur. C'est ici que j'associe chaque id à un entier
 
@@ -78,8 +87,8 @@ for sommet in range(self.g.getNbSommets()):
 ```
 
 
-J'ai ensuite finis de représenter l'ensemble des clauses pour les arêtes 
-vu que 2 sommets adjacents ne peuvent avoir la même couleur. Pour se faire, je 
+J'ai ensuite fini de représenter l'ensemble des clauses pour les arêtes 
+vu que 2 sommets adjacents ne peuvent avoir la même couleur. Pour ce faire, je 
 récupère chaque entier associé aux couples précédemment créer.
 
 ```python
@@ -106,7 +115,7 @@ déterminer le plus court chemin entre 2 lieux.
 J'ai passé la première demi-heure à analyser le code du solverAStar afin de comprendre
 précisément ce qui était attendu en retour de chaque fonction. J'ai donc modifié les fonctions
 que j'avais faites à la séance précédente. J'ai choisi de représenter un état de l'espace par
-le graphe représentant le monde, le numero du sommet d'arrivée et le numero du sommet 
+le graphe représentant le monde, le numéro du sommet d'arrivée et le numéro du sommet 
 correspondant à l'état.
 
 ```python
@@ -118,7 +127,7 @@ arrive : int
 courant : int
 ```
 
-J'ai choisis de définir l'heuristique comme la distance de l'état courant à l'état d'arrivée
+J'ai choisi de définir l'heuristique comme la distance de l'état courant à l'état d'arrivée
 ```python
     def h(self) :  
         """ methode permettant de recuperer l'heuristique de l'etat courant 
@@ -130,13 +139,14 @@ J'ai choisis de définir l'heuristique comme la distance de l'état courant à l
 
 Enfin, j'estime qu'un état est solution si l'état courant = l'état d'arrivée
 
-Cette représentation a bien fonctionné. J'ai eu un petit bug de boucle infinie due au equal que j'ai du réécrire.
+Cette représentation a bien fonctionné. J'ai eu un petit bug de boucle infinie due à la fonction "equal" que 
+j'ai du réécrire car Astar l'utilisait.
 
 Il me reste une demi-heure, je commence à réfléchir au cas 2.
 
 ### 14/02 - 2H
 
-J'ai passé 1h15 sur le cas 2. Les paramètres que j'utilise pour ce cas 2 :
+J'ai passé 1h15 sur le cas 2. Les paramètres que j'utilise pour ce cas 2 sont :
 ```python
     self.tg = tg #le graphe du monde
     self.courant = dep #l'etat courant
@@ -151,7 +161,7 @@ J'ai passé 1h15 sur le cas 2. Les paramètres que j'utilise pour ce cas 2 :
 
 Ensuite, il fallait redéfinir mon heuristique et ma solution.
 
-Le nouvel heuristique d'un état est la distance qui le sépare de l'arrivée multipliée par
+La nouvelle heuristique d'un état est la distance qui le sépare de l'arrivée multipliée par
 le nombre de sommets qu'il reste à visiter.
 ```python
     def h(self) :  
@@ -196,12 +206,13 @@ Je prends un peu d'avance et je lie le cas3.
 
 ### 17/02 - 2H
 
-Je me suis aperçu que mon heuristique n'était pas admissible. Car j'utilisais la distance entre le départ et l'arrivée
-et que je la multipliais par le nombre de sommets restants. L'heuristique est censé être une estimation du coût. Dans mon
+Je me suis aperçu que mon heuristique n'était pas admissible (grâce à l'enseignant). Car j'utilisais la distance entre 
+le départ et l'arrivée et que je la multipliais par le nombre de sommets restants.
+L'heuristique est censée être une estimation du coût. Dans mon
 cas, l'estimation est fausse même si les résultats étaient justes. 
 
-Ma première idée fut de moyénnée les distances entre le sommet et les autres sommets non-visités. Mais ce résultat n'est
-pas admissible car on utilise une moyenne.
+Ma première idée fut de moyenner les distances entre le sommet et les autres sommets non-visités. Mais ce résultat n'est
+pas admissible, car on utilise une moyenne.
 
 J'ai décidé de remplacer mon heuristique dans le cas 2 par :
 ```python
@@ -211,7 +222,7 @@ J'ai décidé de remplacer mon heuristique dans le cas 2 par :
 La fonction getPoidsMinTerre nous renvoie le coût de l'arrête minimale. Même si notre estimation n'est pas forcément juste
 elle reste admissible.
 
-Ensuite je suis passé au cas 3, le cas est relativement simple car il découle du 2. La principale modification est à faire
+Ensuite, je suis passé au cas 3, le cas est relativement simple car il découle du 2. La principale modification est à faire
 sur le retour des sucesseurs. On ne souhaite plus avoir uniquement les adjacents, mais tous les sommets en retirant ceux
 déjà visitées uniquement. 
 ```python
@@ -251,7 +262,7 @@ besoin qu'uniquement de la liste des villes visitées et de mon graphe de Lieu.
 **Mouvement :** Je définis mon mouvement comme le changement d'ordre de deux villes consécutives. Exemple [0-1-2-3-0] 
 a pour voisin [0-2-1-3-0] et [0-1-3-2-0]. On ne change pas le départ et l'arrivée.
 
-Demain j'implemente ma solution
+Demain j'implémente ma solution
 
 ### 22/02 - 4H
 
@@ -308,7 +319,8 @@ d'obtenir un résultat au moins aussi bon avec un nombre d'essai inférieur
 Pour les graphes 150/1000 villes, je pense qu'il y a trop de voisins et que l'algo prend trop de temps à tester chaque
 voisin. Même les résultats pour N=1 ne sont pas obtenus via mon ordinateur.
 
-Cependant, on voit qu'avec cette modélisation-là, TABOU offre des performances largement meilleures qu'avant et que HC.
+Cependant, on voit qu'avec cette modélisation-là, TABOU offre des performances largement meilleures qu'avant et que HC
+sur les graphes plus petits.
 
 Un peu déçu de cette nouvelle solution, je vais rester sur la première solution. Elle représente un bon compromis entre 
 temps d'exécution et performance. Un nombre d'essais compris entre 100 (grand graphe) et 1000 (petits graphes)
@@ -317,7 +329,7 @@ Il a l'air d'être plus "constant" et peut conduire à de meilleurs résultats q
 
 ### 08/03 - 4H
 
-Sur la première demi-heure, je me suis occupé de l'étape 4. Il s'agit d'un problème de coloration. L'encodage du problème
+Sur la première heure, je me suis occupé de l'étape 4. Il s'agit d'un problème de coloration. L'encodage du problème
 peut se faire via la forme d'un graphe de contrainte. 
 
 **L'ensemble des variables :** Les sommets du graphe.
@@ -330,5 +342,11 @@ sommets adjacents. = Un sous-ensemble par arrète du graphe.
 J'ai choisi d'utiliser le solveurCSP pour résoudre ce problème. Les résultats sont tous obtenus et sont bons.
 
 Sur la suite de la séance, je m'attaque à la séance 5. Je garde la partie bonus pour la dernière séance. J'ai passé 1
-bonne heure sur l'installation du solver SCIP à comprendre un peu mieux le fonctionnement du solver, 
-son utilité et comment s'en servir.
+bonne heure sur l'installation du solver SCIP. Et le reste du temps à faire des tests avec le language ZIMPL afin d'en 
+comprendre la syntaxe et le fonctionnement.
+
+En fouillant la doc, je suis tombé sur un exemple concret du problème du voyageur que l'on essaye justement de résoudre.
+L'objectif de la séance suivante va être de comprendre et d'adapter cet exemple pour notre cas.
+
+### 15/03 - 4H
+
