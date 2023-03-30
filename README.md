@@ -140,7 +140,7 @@ J'ai choisi de définir l'heuristique comme la distance de l'état courant à l'
 Enfin, j'estime qu'un état est solution si l'état courant = l'état d'arrivée
 
 Cette représentation a bien fonctionné. J'ai eu un petit bug de boucle infinie due à la fonction "equal" que 
-j'ai du réécrire car Astar l'utilisait.
+j'ai du réécrire, car Astar l'utilisait.
 
 Il me reste une demi-heure, je commence à réfléchir au cas 2.
 
@@ -173,12 +173,12 @@ le nombre de sommets qu'il reste à visiter.
 ```
 
 Un état est solution s'il a le même état courant que l'arrivée et que la longueur de sa liste_parents
-est plus grand ou égal que le nombre de sommets du graphe. (plus grand ou égal car on y ajoute 2 fois le point de départ :
+est plus grand ou égal que le nombre de sommets du graphe. (plus grand ou égal, car on y ajoute 2 fois le point de départ :
 au moment où il part et au moment où il y arrive)
 
-La sélection des sucesseurs changent par rapport au cas 1. (J'ai fait le choix d'ajouter à la liste_parent le sommet courant
+La sélection des successeurs change par rapport au cas 1. (J'ai fait le choix d'ajouter à la liste_parent le sommet courant
 dans le init). Pour chaque adjacent, on initialise des nouveaux états en vérifiant s'ils n'ont pas déjà été la liste_parents 
-de l'état courant. Enfin, si la liste des etats visités est pleine et que l'état arrivée est un adjacent de l'état courant, 
+de l'état courant. Enfin, si la liste des états visités est pleine et que l'état arrivée est un adjacent de l'état courant, 
 alors on renvoie simplement le futur état solution.
 
 ```python
@@ -222,8 +222,8 @@ J'ai décidé de remplacer mon heuristique dans le cas 2 par :
 La fonction getPoidsMinTerre nous renvoie le coût de l'arrête minimale. Même si notre estimation n'est pas forcément juste
 elle reste admissible.
 
-Ensuite, je suis passé au cas 3, le cas est relativement simple car il découle du 2. La principale modification est à faire
-sur le retour des sucesseurs. On ne souhaite plus avoir uniquement les adjacents, mais tous les sommets en retirant ceux
+Ensuite, je suis passé au cas 3, le cas est relativement simple, car il découle du 2. La principale modification est à faire
+sur le retour des successeurs. On ne souhaite plus avoir uniquement les adjacents, mais tous les sommets en retirant ceux
 déjà visitées uniquement. 
 ```python
         def successeurs(self) :
@@ -242,7 +242,7 @@ déjà visitées uniquement.
 La fonction heuristique est adaptée aussi en utilisant getPoidsMinAir() au lieu de getPoidsMinTerre().
 
 Cependant, l'algo mouline dès qu'on dépasse 8 villes. Le problème est très complexe, j'utilise python (qui n'est pas le 
-plus opti) et on ne fait aucun thread parrallèle donc rien d'alarmant.
+plus opti) et on ne fait aucun thread parallel donc rien d'alarmant.
 
 Fin du cas 3,et donc de l'étape 2
 
@@ -337,7 +337,7 @@ peut se faire via la forme d'un graphe de contrainte.
 **Le domaine des variables :** Les couleurs que peuvent prendre un sommet = Toutes les couleurs disponibles.
 
 **L'ensemble des contraintes :** L'ensemble des sous-ensembles de doublons de valeurs autorisés pour un couple de 
-sommets adjacents. = Un sous-ensemble par arrète du graphe.
+sommets adjacents. = Un sous-ensemble par arrête du graphe.
 
 J'ai choisi d'utiliser le solveurCSP pour résoudre ce problème. Les résultats sont tous obtenus et sont bons.
 
@@ -350,3 +350,150 @@ L'objectif de la séance suivante va être de comprendre et d'adapter cet exempl
 
 ### 15/03 - 4H
 
+Toujours sur l'étape 5. Pour représenter notre problème sous forme de contraintes, il faut justement identifier ces "règles".
+
+La première évidente est que l'on doit passer par une ville **UNE** fois (pas 0 ni 2, juste 1) sauf le point de départ.
+
+La seconde est que la liste des arrêtes doit faire un chemin. Pas de sous-ensemble de sommets.
+
+La fonction que l'on minimise est simplement la distance parcourue, que l'on pourrait représenter par une somme de chaque 
+arrêtes parcourues.
+
+Voilà ce que cela donne en language Zimpl :
+
+```
+set V := { 0..7 }; 
+set E := { <i,j> in V*V with i < j };
+set P [ ] := powerset(V);
+set K := indexset(P);
+
+var x[E] binary;
+
+param px [V] := read "../../Data/pb-etape5/tsp8.txt" as "1n" comment "#";
+param py [V] := read "../../Data/pb-etape5/tsp8.txt" as "2n" comment "#";
+
+defnumb dist(a,b) := sqrt((px[a]-px[b])^2 + (py[a]-py[b])^2);
+
+minimize cost : sum <i,j> in E : dist(i,j) * x[i,j];
+
+subto toute_ville_visitee_une_fois :
+forall <v> in V do
+    (sum <v,j> in E : x [v,j] ) + ( sum<i,v> in E : x [i,v] ) == 2;
+
+subto pas_de_sous_ensemble :
+forall <k> in K with card(P[k]) > 2 and card(P[k]) < card(V) - 2 do
+    sum <i,j> in E with <i> in P[k] and <j> in P[k] : x [i,j] <= card(P[k]) - 1;
+```
+
+Décomposons ensemble le code :
+
+Déclaration des variables et des ensembles : 
+- V : Ensemble des villes. Doit être modifié pour chaque problème selon le nombre de ville
+- E : Construit automatique l'ensemble des arrêtes entre les sommets
+- P : L'ensemble des sous-ensembles de V
+- K : Liste des index de P.
+- x : Variable booléenne associée à une arrête. Elle sera mise à 1 si le robot passe par elle
+- Px et py : Coordonnée en x (resp. y) des villes.
+```
+set V := { 0..7 }; 
+set E := { <i,j> in V*V with i < j };
+set P [ ] := powerset(V);
+set K := indexset(P);
+
+var x[E] binary;
+
+param px [V] := read "../../Data/pb-etape5/tsp8.txt" as "1n" comment "#";
+param py [V] := read "../../Data/pb-etape5/tsp8.txt" as "2n" comment "#";
+```
+
+- Définition de notre distance
+```
+  defnumb dist(a,b) := sqrt((px[a]-px[b])^2 + (py[a]-py[b])^2);
+```
+
+- Définition de notre fonction à minimiser
+```
+  minimize cost : sum <i,j> in E : dist(i,j) * x[i,j];
+```
+
+- 1ʳᵉ contrainte : un sommet n'est lié qu'à 2 autres au maximum.
+```
+subto toute_ville_visitee_une_fois :
+forall <v> in V do
+    (sum <v,j> in E : x [v,j] ) + ( sum<i,v> in E : x [i,v] ) == 2;
+```
+
+- 2ᵉ contraintes : Un sous ensemble de n sommets ne peut être lié que par n-1 arrêtes. Cela évite les ensembles 
+de sommets isolés
+```
+subto pas_de_sous_ensemble :
+forall <k> in K with card(P[k]) > 2 and card(P[k]) < card(V) - 2 do
+    sum <i,j> in E with <i> in P[k] and <j> in P[k] : x [i,j] <= card(P[k]) - 1;
+```
+
+J'ai fait quelques tests sur 6,7,8 villes qui se sont déroulés sans accros. 
+
+Je teste par curiosité sur les 146 villes, est ce que cette nouvelle forme du problème permet-elle de
+résoudre plus rapidement les problèmes que lors de notre étape 2 où on bloquait au-delà de 8 villes :
+
+J'ai peut-être été un peu ambitieux avec 146 villes (mon PC tourne toujours). Je teste pour 26.
+
+26 villes ne marche pas non plus, je vais donc essayer 19 :
+
+Le problème a finalement été résolu en 283.00 secondes. 
+
+La mise en forme sous contraintes présente quand même des avantages non négligents par rapport aux graphes.
+Le programme met largement moins de temps et peut résoudre des problèmes plus complexes avec plus de villes.
+
+Pour les 2h qu'il me reste, je vais conclure le journal et essayer de commencer à développer mon propre solver : le SolverLOLO.
+
+# CONCLUSION DES 24 HEURES
+
+Problème de coloration de Graphe : Etape 1 vs Etape 4
+
+Honnêtement, je n'ai pas noté de différences flagrantes en termes de performances entre la logique propositionnelle et 
+la modélisation sous forme de graphes de contraintes (CSP). Peut-être que la logique propositionnelle offre une résolution
+à peine plus rapide. Mais je n'ai rien pu mesurer précisément.
+
+Problème de parcours de graphe : Etape 2 cas 3 VS Etape 3 VS Etape 5
+
+Ici c'est un peu plus complexe, on a vu avec l'étape 2 cas 3 que les solutions complètes n'arrivaient pas à trouver une
+solution si le problème est trop complexe (temps d'exécution trop important). L'étape 3 permettait de mettre en place des solutions
+incomplètes (Tabou et HC) afin de trouver une solution potentiellement un peu moins bonne, mais au moins en avoir une.
+
+Là ou on bloquait à 8 villes avec l'étape 2, on arrivait à monter à 1000 villes avec les solutions incomplètes.
+
+L'étape 5 apporte une alternative sur les solutions complètes de l'étape 2. En effet, grâce à la PLNE on arrive à résoudre
+des problèmes allant jusqu'à une vingtaine de ville avec l'assurance d'avoir la meilleure solution. Ce qui offre, une meilleure
+performance en "temps d'exécution" que pour l'étape 2, mais reste insuffisant pour des problèmes vraiment plus complexes où on préfèrera les
+solutions incomplètes de l'étape 3.
+
+# PARTIE BONUS : SOLVER LOLO
+
+Par curiosité, j'ai réalisé mon propre solver CSP. J'avais commencé par utiliser la librairie constraint de python, 
+mais je me suis aperçu qu'elle n'était pas vraiment adaptée pour résoudre des problèmes avec des contraintes de couples
+interdits. De plus je n'arrivais pas à ajouter différentes contraintes sur le même problème. Il aurait fallut créer un
+ensemble de problème avec une contrainte chacun puis récupérer l'intersection de tous ces problèmes. Je pense que ce
+n'était pas la solution la plus optimale.
+
+J'ai donc décidé de tout faire moi-même à l'aide d'un dictionnaire des variables et de leur domaine, et d'un second 
+dictionnaire pour chaque couple interdit qui donne les valeurs respectives. Je génère alors un ensemble de solution
+pour y appliquer ensuite mes contraintes et obtenir uniquement les solutions qui respectent les contraintes.
+
+En entrée, le fichier .txt doit respecter la structure suivante :
+```
+Structure d'un fichier de donnees type
+
+v var1 var1_val1 var1_val2 ... var1_valm
+v var2 var2_val1 var2_val2 ... var2_valp
+.
+.
+v varn varn_val1 varn_val2 ... varn_valj
+s var1 var2 //couple de val (x,y) interdit pour var1 et var2
+c x y
+c x y
+c x y
+s ..
+c x y
+c x y
+```

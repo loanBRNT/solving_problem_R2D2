@@ -1,12 +1,12 @@
-set V := { 0..7 };
+set V := { 0..18 };
 set E := { <i,j> in V*V with i < j };
 set P [ ] := powerset(V);
 set K := indexset(P);
 
 var x[E] binary;
 
-param px [V] := read "../../Data/pb-etape5/tsp8.txt" as "1n" comment "#";
-param py [V] := read "../../Data/pb-etape5/tsp8.txt" as "2n" comment "#";
+param px [V] := read "../../Data/pb-etape5/tsp19.txt" as "1n" comment "#";
+param py [V] := read "../../Data/pb-etape5/tsp19.txt" as "2n" comment "#";
 
 defnumb dist(a,b) := sqrt((px[a]-px[b])^2 + (py[a]-py[b])^2);
 
