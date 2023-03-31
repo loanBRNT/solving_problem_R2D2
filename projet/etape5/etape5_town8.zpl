@@ -8,6 +8,7 @@ var x[E] binary;
 param px [V] := read "../../Data/pb-etape5/tsp8.txt" as "1n" comment "#";
 param py [V] := read "../../Data/pb-etape5/tsp8.txt" as "2n" comment "#";
 
+
 defnumb dist(a,b) := sqrt((px[a]-px[b])^2 + (py[a]-py[b])^2);
 
 minimize cost : sum <i,j> in E : dist(i,j) * x[i,j];

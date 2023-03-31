@@ -10,6 +10,7 @@ param py [V] := read "../../Data/pb-etape5/tsp146.txt" as "2n" comment "#";
 
 defnumb dist(a,b) := sqrt((px[a]-px[b])^2 + (py[a]-py[b])^2);
 
+
 minimize cost : sum <i,j> in E : dist(i,j) * x[i,j];
 
 subto toute_ville_visitee_une_fois :

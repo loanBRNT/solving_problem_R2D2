@@ -8,6 +8,7 @@ param py [V] := read "../../Data/pb-etape5/tsp6.txt" as "2n" comment "#";
 
 defnumb dist(a,b) := sqrt((px[a]-px[b])^2 + (py[a]-py[b])^2) ;
 
+
 var x[E] binary ;
 
 minimize cost : sum <i,j> in E : dist(i,j) * x[i,j] ;
